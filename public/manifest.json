@@ -1,0 +1,10 @@
+{
+    "name": "CallSignal",
+    "short_name": "CallSignal",
+    "description": "Real-time earnings call keyword monitoring",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#06080d",
+    "theme_color": "#06080d",
+    "icons": []
+}
