@@ -7,6 +7,7 @@ export default function LoginPage() {
 
     return (
         <div className="login-page">
+            <div className="login-bg-orbs"><span /></div>
             <div className="login-card">
                 <div className="login-header">
                     <div className="login-logo">

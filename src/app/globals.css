@@ -1353,13 +1353,149 @@ body {
 }
 
 /* ===== LOGIN PAGE ===== */
+
+/* --- Animated gradient background --- */
+@keyframes bgShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #eef2f7 0%, #dfe6ee 50%, #e8ecf4 100%);
+  background: linear-gradient(-45deg, #eef2f7, #dde4f0, #d6e0f5, #e4e8f4, #eef2f7);
+  background-size: 400% 400%;
+  animation: bgShift 16s ease infinite;
   padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Floating orbs --- */
+@keyframes float1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(60px, -40px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(-30px, -80px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(40px, 20px) scale(1.02);
+  }
+}
+
+@keyframes float2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(-50px, 50px) scale(1.08);
+  }
+
+  66% {
+    transform: translate(40px, -60px) scale(0.96);
+  }
+}
+
+@keyframes float3 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  20% {
+    transform: translate(30px, 60px) scale(0.97);
+  }
+
+  60% {
+    transform: translate(-60px, -20px) scale(1.06);
+  }
+
+  80% {
+    transform: translate(20px, -50px) scale(1);
+  }
+}
+
+.login-bg-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.login-bg-orbs::before,
+.login-bg-orbs::after,
+.login-bg-orbs span {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+
+.login-bg-orbs::before {
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.25), transparent 70%);
+  top: -80px;
+  right: -60px;
+  animation: float1 14s ease-in-out infinite;
+}
+
+.login-bg-orbs::after {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.2), transparent 70%);
+  bottom: -40px;
+  left: -40px;
+  animation: float2 18s ease-in-out infinite;
+}
+
+.login-bg-orbs span {
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(15, 118, 110, 0.18), transparent 70%);
+  top: 50%;
+  left: 50%;
+  margin-top: -110px;
+  margin-left: -110px;
+  animation: float3 20s ease-in-out infinite;
+}
+
+/* --- Card entrance --- */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .login-card {
@@ -1370,18 +1506,71 @@ body {
   border-radius: var(--radius-xl);
   box-shadow: 0 8px 40px rgba(26, 54, 92, 0.08), 0 2px 12px rgba(0, 0, 0, 0.04);
   overflow: hidden;
+  position: relative;
+  z-index: 1;
+  animation: cardIn 0.7s var(--ease-out) both;
+}
+
+/* --- Staggered content reveals --- */
+@keyframes contentIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .login-header {
   text-align: center;
   padding: 40px 40px 24px;
   background: linear-gradient(180deg, rgba(37, 99, 235, 0.03) 0%, transparent 100%);
+  animation: contentIn 0.5s var(--ease-out) 0.3s both;
+}
+
+.login-body {
+  padding: 0 40px 32px;
+  animation: contentIn 0.5s var(--ease-out) 0.5s both;
+}
+
+.login-footer {
+  padding: 14px 40px;
+  text-align: center;
+  border-top: 1px solid var(--border-0);
+  background: var(--bg-3);
+  animation: contentIn 0.5s var(--ease-out) 0.7s both;
+}
+
+.login-footer p {
+  font-size: 10.5px;
+  color: var(--text-3);
+  margin: 0;
+}
+
+/* --- Logo pulse glow --- */
+@keyframes logoPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 0 18px 6px rgba(37, 99, 235, 0.12);
+  }
 }
 
 .login-logo {
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
+}
+
+.login-logo .sidebar-logo-icon {
+  animation: logoPulse 3s ease-in-out infinite;
 }
 
 .login-title {
@@ -1397,16 +1586,23 @@ body {
   font-weight: 400;
 }
 
-.login-body {
-  padding: 0 40px 32px;
-}
-
 .login-description {
   font-size: 13.5px;
   color: var(--text-2);
   line-height: 1.6;
   text-align: center;
   margin: 0 0 24px;
+}
+
+/* --- Google button with shimmer --- */
+@keyframes shimmer {
+  from {
+    left: -100%;
+  }
+
+  to {
+    left: 200%;
+  }
 }
 
 .login-btn-google {
@@ -1423,14 +1619,39 @@ body {
   font-weight: 600;
   color: var(--text-0);
   cursor: pointer;
-  transition: all var(--t-fast) var(--ease-out);
+  transition: all 0.25s var(--ease-out);
   font-family: var(--font-sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn-google::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.55),
+      transparent);
+  transition: none;
 }
 
 .login-btn-google:hover {
   border-color: var(--cta);
   background: rgba(37, 99, 235, 0.03);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+}
+
+.login-btn-google:hover::after {
+  animation: shimmer 0.75s ease-out;
+}
+
+.login-btn-google:active {
+  transform: translateY(0);
 }
 
 .login-btn-google svg {
@@ -1461,6 +1682,7 @@ body {
   font-weight: 500;
 }
 
+/* --- Feature rows with stagger --- */
 .login-features {
   display: flex;
   flex-direction: column;
@@ -1475,6 +1697,26 @@ body {
   border-radius: var(--radius-sm);
   background: var(--bg-3);
   border: 1px solid var(--border-0);
+  animation: contentIn 0.45s var(--ease-out) both;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.login-feature:nth-child(1) {
+  animation-delay: 0.65s;
+}
+
+.login-feature:nth-child(2) {
+  animation-delay: 0.78s;
+}
+
+.login-feature:nth-child(3) {
+  animation-delay: 0.91s;
+}
+
+.login-feature:hover {
+  background: var(--bg-4);
+  border-color: var(--border-1);
+  transform: translateX(4px);
 }
 
 .login-feature-icon {
@@ -1494,19 +1736,6 @@ body {
   font-size: 11.5px;
   color: var(--text-2);
   margin-top: 1px;
-}
-
-.login-footer {
-  padding: 14px 40px;
-  text-align: center;
-  border-top: 1px solid var(--border-0);
-  background: var(--bg-3);
-}
-
-.login-footer p {
-  font-size: 10.5px;
-  color: var(--text-3);
-  margin: 0;
 }
 
 /* ===== SIDEBAR USER PROFILE ===== */
