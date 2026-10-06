@@ -134,7 +134,11 @@ export function useCallSignal() {
         if (!key) return;
         setLoadingCalendar(true);
         try {
-            const res = await fetch(`/api/earnings?type=calendar&apiKey=${encodeURIComponent(key)}`);
+            // API key goes in a header so it never lands in server access logs
+            // (the route still accepts the query param as a fallback).
+            const res = await fetch('/api/earnings?type=calendar', {
+                headers: { 'x-fmp-api-key': key },
+            });
             const json = await res.json();
             if (json.data && Array.isArray(json.data)) {
                 const now = new Date();

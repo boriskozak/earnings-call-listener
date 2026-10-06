@@ -7,7 +7,8 @@ const FMP_STABLE = 'https://financialmodelingprep.com/stable';
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type') || 'calendar';
-    const apiKey = searchParams.get('apiKey') || process.env.FMP_API_KEY || '';
+    // Prefer the header so API keys stay out of URLs and server access logs
+    const apiKey = request.headers.get('x-fmp-api-key') || searchParams.get('apiKey') || process.env.FMP_API_KEY || '';
 
     if (!apiKey) {
         return Response.json({ error: 'No API key provided. Get a free key at https://financialmodelingprep.com/register', data: null }, { status: 400 });
