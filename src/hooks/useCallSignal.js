@@ -31,6 +31,7 @@ export function useCallSignal() {
     const transcriptRef = useRef(null);
     const streamTimerRef = useRef(null);
     const streamIndexRef = useRef(0);
+    const toastIdRef = useRef(0);
 
     // ===== SUPABASE PERSISTENCE =====
     const supabase = getSupabase();
@@ -108,7 +109,11 @@ export function useCallSignal() {
 
     // ===== TOAST =====
     const addToast = useCallback((title, message, type = 'info') => {
-        const id = Date.now();
+        // Monotonic counter suffix: Date.now() alone collides when multiple
+        // toasts fire in the same millisecond, breaking React keys and
+        // removeToast-by-id.
+        toastIdRef.current += 1;
+        const id = `${Date.now()}-${toastIdRef.current}`;
         setToasts(prev => [...prev, { id, title, message, type }]);
         setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 5000);
     }, []);
