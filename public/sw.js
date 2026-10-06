@@ -20,8 +20,8 @@ self.addEventListener('push', (event) => {
     const title = data.title || '⚡ CallSignal Alert';
     const options = {
         body: data.body || 'A keyword match was detected in an earnings call.',
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: '/icon.svg',
+        badge: '/icon.svg',
         tag: 'callsignal-alert',
         renotify: true,
         vibrate: [200, 100, 200],
