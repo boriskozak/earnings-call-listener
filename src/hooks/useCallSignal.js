@@ -151,6 +151,23 @@ export function useCallSignal() {
         setLoadingCalendar(false);
     }, [addToast]);
 
+    // ===== PUSH NOTIFICATIONS =====
+    async function sendPushNotification(alert) {
+        try {
+            await fetch('/api/push/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: `⚡ ${alert.keywords.join(', ')}`,
+                    body: `${alert.speaker} — ${alert.ticker} call: "${alert.text.substring(0, 100)}..."`,
+                    url: '/',
+                }),
+            });
+        } catch (err) {
+            // Push send is best-effort
+        }
+    }
+
     // ===== STREAMING =====
     const startStream = useCallback((company) => {
         setSelectedCompany(company);
@@ -237,23 +254,6 @@ export function useCallSignal() {
             transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
         }
     }, [transcriptLines]);
-
-    // ===== PUSH NOTIFICATIONS =====
-    async function sendPushNotification(alert) {
-        try {
-            await fetch('/api/push/send', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title: `⚡ ${alert.keywords.join(', ')}`,
-                    body: `${alert.speaker} — ${alert.ticker} call: "${alert.text.substring(0, 100)}..."`,
-                    url: '/',
-                }),
-            });
-        } catch (err) {
-            // Push send is best-effort
-        }
-    }
 
     // ===== WATCHLIST MUTATIONS =====
     const addToWatchlist = useCallback(async (company) => {
