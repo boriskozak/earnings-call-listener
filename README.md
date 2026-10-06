@@ -1,34 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CallSignal — Live Earnings Call Monitor
+
+Real-time keyword alerts on public company earnings calls. Add companies to your watchlist,
+define keywords per company (plus global keywords), and get instant in-app toasts and
+browser push notifications when a transcript line matches.
+
+## Features
+
+- **Watchlist** — track companies with per-company keywords
+- **Live-ish transcript stream** — demo stream plus Benzinga WebSocket support for live calls
+- **Keyword matching** — alerts fire the moment a transcript line contains a keyword
+- **Push notifications** — browser push via Web Push (VAPID) even when the tab is closed
+- **Earnings calendar** — upcoming earnings dates from Financial Modeling Prep (FMP)
+- **Persistence** — watchlist, keywords, and alerts sync to Supabase (localStorage-free)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Without any env vars configured, the app runs in demo mode: watchlist and keywords use
+built-in defaults, and the transcript player streams a sample IBM earnings call.
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+Copy these into `.env.local` to unlock live data and persistence:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variable | Required for | Notes |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Persistence | From your Supabase project settings |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Persistence | From your Supabase project settings |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Push notifications | Generate with `npx web-push generate-vapid-keys` |
+| `VAPID_PRIVATE_KEY` | Push notifications | Private half of the VAPID pair (server only) |
+| `FMP_API_KEY` | Earnings calendar, transcripts | Free tier (250 calls/day) at [financialmodelingprep.com/register](https://financialmodelingprep.com/register) |
+| `BENZINGA_API_KEY` | Live transcripts | Free trial at [benzinga.com/apis](https://www.benzinga.com/apis/conference-call-transcripts) |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The FMP and Benzinga keys can also be entered and saved in the Settings view, which stores
+them in the `user_settings` table when Supabase is configured.
 
-## Deploy on Vercel
+## Supabase Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create a free project at [supabase.com](https://supabase.com).
+2. Open the SQL Editor and run [`supabase/schema.sql`](supabase/schema.sql) (a migration
+   script is also kept in `supabase-migration.sql`).
+3. Add the URL and anon key to `.env.local` as above.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Layout
+
+- `src/app/page.js` — main app shell and view routing
+- `src/components/` — views (Dashboard, Watchlist, Keywords, Calendar, Alerts, Settings)
+- `src/hooks/useCallSignal.js` — central state: watchlist, keywords, alerts, transcript stream
+- `src/hooks/useNotifications.js` — push subscription management
+- `src/hooks/useBenzinga.js` — Benzinga live transcript WebSocket
+- `src/app/api/` — server routes proxying FMP, Benzinga, and push delivery
+- `public/sw.js` — service worker for push notifications
+
+## Scripts
+
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm start` — serve the production build
+- `npm run lint` — ESLint
+
+## Deploy
+
+The app deploys as a standard Next.js project. On Vercel, add the environment variables
+above in the project settings. The `/api/*` routes and `sw.js` header config in
+`next.config.mjs` carry over as-is.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
