@@ -27,7 +27,7 @@ export async function GET(request) {
             }
             case 'transcript': {
                 // Earnings call transcript
-                const symbol = searchParams.get('symbol') || 'IBM';
+                const symbol = encodeURIComponent(searchParams.get('symbol') || 'IBM');
                 const year = searchParams.get('year') || new Date().getFullYear();
                 const quarter = searchParams.get('quarter') || '1';
                 url = `${FMP_STABLE}/earning-call-transcript?symbol=${symbol}&year=${year}&quarter=${quarter}&apikey=${apiKey}`;
@@ -35,7 +35,7 @@ export async function GET(request) {
             }
             case 'transcript-dates': {
                 // Available transcript dates for a symbol
-                const symbol = searchParams.get('symbol') || 'IBM';
+                const symbol = encodeURIComponent(searchParams.get('symbol') || 'IBM');
                 url = `${FMP_STABLE}/earning-call-transcript?symbol=${symbol}&apikey=${apiKey}`;
                 break;
             }
@@ -47,7 +47,7 @@ export async function GET(request) {
             }
             case 'profile': {
                 // Company profile
-                const symbol = searchParams.get('symbol') || 'IBM';
+                const symbol = encodeURIComponent(searchParams.get('symbol') || 'IBM');
                 url = `${FMP_STABLE}/profile?symbol=${symbol}&apikey=${apiKey}`;
                 break;
             }
