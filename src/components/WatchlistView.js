@@ -84,14 +84,15 @@ export default function WatchlistView({
             {/* Add Watchlist Modal */}
             {showAddModal && (
                 <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-                    <div className="modal" onClick={e => e.stopPropagation()}>
+                    <div className="modal" role="dialog" aria-modal="true" aria-label="Add to Watchlist" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
                             <h3 className="modal-title">Add to Watchlist</h3>
-                            <button className="modal-close" onClick={() => setShowAddModal(false)}>✕</button>
+                            <button className="modal-close" onClick={() => setShowAddModal(false)} aria-label="Close add to watchlist dialog">✕</button>
                         </div>
                         <div className="modal-body">
                             <input
                                 className="input"
+                                aria-label="Search ticker or company name"
                                 placeholder="Search ticker or company name..."
                                 value={searchTicker}
                                 onChange={(e) => setSearchTicker(e.target.value)}
