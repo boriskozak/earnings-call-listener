@@ -106,6 +106,7 @@ export default function SettingsView({
                     <input
                         className="input"
                         type="password"
+                        aria-label="FMP API key"
                         placeholder="Enter your FMP API key..."
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
@@ -137,6 +138,7 @@ export default function SettingsView({
                     <input
                         className="input"
                         type="password"
+                        aria-label="Benzinga API key"
                         placeholder="Enter your Benzinga API key..."
                         value={benzingaKey}
                         onChange={(e) => setBenzingaKey(e.target.value)}
