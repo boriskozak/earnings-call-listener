@@ -33,6 +33,7 @@ export default function KeywordsView({ globalKeywords, addKeyword, removeKeyword
                 <form onSubmit={handleSubmit} className="input-with-btn" style={{ marginBottom: 16 }}>
                     <input
                         className="input"
+                        aria-label="Keyword or phrase to track"
                         placeholder="Type a keyword or phrase to track..."
                         value={newKeyword}
                         onChange={(e) => setNewKeyword(e.target.value)}
