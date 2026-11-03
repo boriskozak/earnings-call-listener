@@ -58,6 +58,7 @@ export default function WatchlistView({
                                         {globalKeywords.filter(gk => !w.keywords.includes(gk)).length > 0 && (
                                             <select
                                                 className="input"
+                                                aria-label={`Add a global keyword to ${w.ticker}`}
                                                 style={{ padding: '2px 8px', fontSize: 10, width: 'auto', minWidth: 90 }}
                                                 value=""
                                                 onChange={(e) => {
