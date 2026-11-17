@@ -46,9 +46,9 @@ export default function CalendarView({
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                         {liveCalendar && <span className="badge badge-green">LIVE DATA</span>}
                         {!liveCalendar && <span className="badge badge-amber">DEMO DATA</span>}
-                        <div className="tab-bar">
-                            <button className={`tab ${calendarFilter === 'all' ? 'active' : ''}`} onClick={() => setCalendarFilter('all')}>All</button>
-                            <button className={`tab ${calendarFilter === 'watchlist' ? 'active' : ''}`} onClick={() => setCalendarFilter('watchlist')}>Watchlist</button>
+                        <div className="tab-bar" role="tablist" aria-label="Calendar filter">
+                            <button className={`tab ${calendarFilter === 'all' ? 'active' : ''}`} role="tab" aria-selected={calendarFilter === 'all'} onClick={() => setCalendarFilter('all')}>All</button>
+                            <button className={`tab ${calendarFilter === 'watchlist' ? 'active' : ''}`} role="tab" aria-selected={calendarFilter === 'watchlist'} onClick={() => setCalendarFilter('watchlist')}>Watchlist</button>
                         </div>
                     </div>
                 </div>
