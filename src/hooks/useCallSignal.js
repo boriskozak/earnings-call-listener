@@ -141,9 +141,13 @@ export function useCallSignal() {
             });
             const json = await res.json();
             if (json.data && Array.isArray(json.data)) {
-                const now = new Date();
+                // Compare YYYY-MM-DD strings, not Date objects: a date-only
+                // string parses as UTC midnight, which is already "past" by
+                // morning in US timezones, so comparing against `new Date()`
+                // dropped today's earnings from the calendar.
+                const todayStr = new Date().toLocaleDateString('en-CA');
                 const filtered = json.data
-                    .filter(item => new Date(item.date) >= now)
+                    .filter(item => item.date >= todayStr)
                     .sort((a, b) => new Date(a.date) - new Date(b.date))
                     .slice(0, 50);
                 setLiveCalendar(filtered);
