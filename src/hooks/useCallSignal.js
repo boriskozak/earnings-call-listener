@@ -188,7 +188,6 @@ export function useCallSignal() {
         setStreamIndex(0);
         streamIndexRef.current = 0;
         setIsStreaming(true);
-        setAlerts(prev => prev); // keep existing alerts
         addToast('📡 Connected', `Monitoring ${company.name || company.ticker} (${company.ticker}) earnings call`, 'info');
     }, [addToast]);
 
