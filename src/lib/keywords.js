@@ -8,13 +8,16 @@
 export function matchKeywords(text, keywords) {
     const matches = [];
     if (!text || !keywords || keywords.length === 0) return matches;
-    const lowerText = text.toLowerCase();
     for (const keyword of keywords) {
-        const lowerKeyword = keyword.toLowerCase();
-        let idx = lowerText.indexOf(lowerKeyword);
-        while (idx !== -1) {
-            matches.push({ keyword, index: idx, length: keyword.length });
-            idx = lowerText.indexOf(lowerKeyword, idx + 1);
+        if (!keyword) continue;
+        // Escape regex metacharacters so a keyword like "c++" is matched literally.
+        const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // Whole-word match only: "ai" must not fire inside "said" or "again".
+        // Lookarounds (not \b) so keywords ending in punctuation still match.
+        const re = new RegExp(`(?<!\\w)${escaped}(?!\\w)`, 'gi');
+        let m;
+        while ((m = re.exec(text)) !== null) {
+            matches.push({ keyword, index: m.index, length: m[0].length });
         }
     }
     return matches;
